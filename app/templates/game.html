@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake and Ladder Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Snake and Ladder</h1>
+    <h2>{{ message }}</h2>
+
+    {% if not winner %}
+    <form action="{{ url_for('app_routes.roll_dice') }}" method="post" id="rollForm">
+        <button type="submit">Roll Dice</button>
+    </form>
+    {% else %}
+    <h2>🎉 {{ winner }} wins the game! 🎉</h2>
+    <a href="{{ url_for('app_routes.index') }}">Play Again</a>
+    {% endif %}
+
+    <div class="board">
+        {% for row in board_data %}
+            <div class="row">
+                {% for cell in row %}
+                    <div class="cell">
+                        {{ cell.number }}
+                        {% if cell.has_snake %}
+                            🐍 to {{ cell.snake_to }}
+                        {% endif %}
+                        {% if cell.has_ladder %}
+                            🪜 to {{ cell.ladder_to }}
+                        {% endif %}
+                        {% for p in cell.players %}
+                            <div class="player">{{ p }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.getElementById('rollForm').onsubmit = function(event) {
+            event.preventDefault();
+            fetch('{{ url_for("app_routes.roll_dice") }}', {method: 'POST'})
+            .then(response => response.json())
+            .then(data => window.location.href = data.redirect);
+        };
+    </script>
+</body>
+</html>

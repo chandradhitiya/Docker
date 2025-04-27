@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Start a New Game</h1>
+    <form method="POST">
+        <label>Number of Players:</label>
+        <input type="number" name="player_count" min="2" max="4" required><br><br>
+        <div id="players"></div>
+        <button type="button" onclick="addPlayers()">Add Players</button><br><br>
+        <button type="submit">Start Game</button>
+    </form>
+
+    <script>
+        function addPlayers() {
+            var playerCount = document.querySelector('input[name="player_count"]').value;
+            var playersDiv = document.getElementById('players');
+            playersDiv.innerHTML = '';
+            for (var i = 0; i < playerCount; i++) {
+                playersDiv.innerHTML += `<label>Player ${i+1} Name:</label> <input type="text" name="player_${i+1}" required><br>`;
+            }
+        }
+    </script>
+</body>
+</html>
